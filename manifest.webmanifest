@@ -1,0 +1,14 @@
+{
+  "name": "Marfim Criativa AI",
+  "short_name": "Marfim Criativa",
+  "description": "Cria e personaliza materiais gráficos.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f3f6fa",
+  "theme_color": "#102746",
+  "icons": [
+    {"src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable"}
+  ]
+}

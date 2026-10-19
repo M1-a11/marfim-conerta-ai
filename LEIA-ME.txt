@@ -1,0 +1,24 @@
+MARFIM CRIATIVA AI — VERSÃO 0.8
+
+O QUE ESTA VERSÃO FAZ
+- Mantém o editor, modelos, exportação e rascunhos locais da versão 0.7.
+- Acrescenta o botão “Criar com IA online”.
+- A IA usa uma função Netlify no servidor e a Gemini API. A chave NÃO deve ser colocada no HTML.
+
+PUBLICAÇÃO (IMPORTANTE)
+Esta versão inclui uma função de servidor; não basta arrastar apenas index.html para Netlify Drop.
+1. Descompacta este ZIP no computador ou envia todos os ficheiros para um repositório GitHub.
+2. No Netlify, importa/conecta o repositório GitHub como site existente ou cria um novo site a partir dele.
+3. Confirma que a pasta netlify/functions/create-design.mjs e o ficheiro netlify.toml estão na raiz do projecto.
+4. No painel Netlify, abre as variáveis de ambiente e cria GEMINI_API_KEY com a chave obtida no Google AI Studio. Dá à variável o âmbito de Functions, se essa opção aparecer.
+5. Faz novo deploy. Depois testa o botão “Criar com IA online”.
+
+CHAVE DA API
+- Obtém/gera a chave em https://aistudio.google.com/app/apikey
+- Nunca coloques a chave no index.html, em mensagens públicas ou num repositório público.
+- A API pode ter limites gratuitos, quotas e regras de tratamento de dados. Consulta os termos e preços antes de abrir o uso ao público.
+- A versão atual não tem autenticação nem limitação robusta de pedidos por utilizador; testa primeiro em privado e não a anuncies como serviço público de IA até acrescentarmos protecção contra abuso.
+- Não introduzas dados pessoais sensíveis em descrições enviadas à IA.
+
+NOTA TÉCNICA
+A função chama Gemini 3.1 Flash-Lite para devolver texto estruturado. Ela organiza conteúdo e sugere estilo/formato; não gera automaticamente uma imagem final nem substitui a revisão humana. A exportação visual continua a ser feita pelo editor local.

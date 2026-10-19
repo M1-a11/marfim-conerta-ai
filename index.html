@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Marfim Criativa AI — Versão 0.8</title>
+<meta name="theme-color" content="#102746">
+<meta name="description" content="Cria e personaliza flyers, convites e materiais gráficos com a Marfim Criativa AI.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<style>
+:root{--navy:#102746;--blue:#194b7a;--orange:#f28c28;--paper:#f3f6fa;--ink:#172333;--muted:#617187;--line:#dce4ed}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--paper);color:var(--ink)}
+header{background:linear-gradient(120deg,var(--navy),var(--blue));color:white;padding:20px clamp(14px,4vw,40px)}
+.top{max-width:1250px;margin:auto;display:flex;justify-content:space-between;align-items:center;gap:12px}.brand{font-weight:900;font-size:20px}.brand em{font-style:normal;color:#ffb35e}.badge{font-size:11px;border:1px solid #ffffff55;padding:7px 10px;border-radius:30px}
+.intro{max-width:1250px;margin:22px auto 0}.intro h1{font-size:clamp(26px,4vw,40px);margin:0 0 8px}.intro p{margin:0;color:#e1eaf4;line-height:1.5}
+main{max-width:1250px;margin:22px auto;padding:0 14px 38px}.layout{display:grid;grid-template-columns:330px minmax(0,1fr);gap:16px;align-items:start}
+.panel{background:#fff;border:1px solid var(--line);border-radius:16px;padding:17px;box-shadow:0 5px 18px #10274608}.panel h2{font-size:17px;margin:0 0 13px}
+label{display:block;font-size:12px;font-weight:700;margin:11px 0 5px;color:#344256}input,textarea,select{width:100%;border:1px solid var(--line);border-radius:9px;padding:10px;font:inherit;font-size:13px;background:white;color:var(--ink)}textarea{resize:vertical;min-height:60px}.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+button{border:0;border-radius:9px;padding:10px 12px;font-weight:800;font-size:12px;cursor:pointer}.primary{background:var(--orange);color:#172333}.dark{background:var(--navy);color:white}.soft{background:#edf2f8;color:var(--navy)}.buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.swatches{display:flex;gap:9px;margin-top:8px}.swatch{width:27px;height:27px;border-radius:50%;padding:0;border:2px solid white;box-shadow:0 0 0 1px #cbd5e1}.swatch:focus{outline:2px solid var(--orange)}
+.workspace-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}.workspace-head h2{margin:0}.tip{font-size:12px;color:var(--muted);line-height:1.5;margin:9px 0 0}
+.stage{background:#e7edf5;border-radius:13px;min-height:500px;padding:18px;display:grid;place-items:center}
+#design{width:min(100%,520px);aspect-ratio:4/5;background:#102746;color:white;position:relative;overflow:hidden;box-shadow:0 14px 35px #10274630;touch-action:none;user-select:none}
+.shape{position:absolute;border-radius:50%;pointer-events:none}.shape.one{width:290px;height:290px;right:-95px;top:-85px;background:#f28c28}.shape.two{width:190px;height:190px;left:-95px;bottom:45px;border:2px solid #ffffff44}
+.item{position:absolute;left:8%;width:84%;padding:4px;cursor:move;touch-action:none;white-space:pre-wrap;overflow-wrap:anywhere;z-index:2;border:1px dashed transparent}
+.item.selected{border-color:#ffb35e;background:#ffffff12}.item:focus{outline:none}
+#org{top:7%;font-size:clamp(10px,2vw,15px);font-weight:900;letter-spacing:2px;text-transform:uppercase}
+#kicker{top:24%;font-size:12px;letter-spacing:2px;font-weight:800;color:#ffc27d;text-transform:uppercase}
+#headline{top:30%;font-size:clamp(28px,5vw,47px);font-weight:900;line-height:1.03}
+#desc{top:49%;font-size:clamp(13px,2vw,17px);line-height:1.45;color:#e0e9f4}
+#details{top:70%;font-size:clamp(11px,1.7vw,14px);line-height:1.8;border-top:1px solid #ffffff66;padding-top:12px}
+#footer{top:91%;font-size:9px;letter-spacing:1.5px;text-transform:uppercase;color:#d4dfec}
+.photo{position:absolute;z-index:1;max-width:35%;max-height:25%;object-fit:cover;left:58%;top:48%;border:3px solid white;border-radius:8px;cursor:move;touch-action:none}
+.editor-tools{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.editor-tools button{width:100%}
+.status{font-size:11px;color:#26734d;background:#e8f7ee;padding:6px 9px;border-radius:30px;font-weight:800}
+.notice{margin-top:16px;padding:12px 14px;background:#fff8ed;border:1px solid #f7dfbd;border-radius:12px;font-size:12px;line-height:1.5;color:#60421c}
+footer{text-align:center;padding:18px;color:var(--muted);font-size:11px}
+.template-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0 18px}.template-card{background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px;text-align:left;cursor:pointer;color:var(--ink);min-height:84px}.template-card strong{display:block;margin-bottom:5px;font-size:14px}.template-card span{display:block;color:var(--muted);font-size:12px;line-height:1.35}.template-card:hover,.template-card:focus{border-color:var(--orange);box-shadow:0 0 0 2px #f28c2822;outline:none}.section-note{font-size:12px;color:var(--muted);line-height:1.4;margin-top:0}
+@media(max-width:850px){.layout{grid-template-columns:1fr}.stage{min-height:400px}.panel{padding:14px}}
+@media(max-width:450px){.badge{display:none}.stage{padding:8px;min-height:0}.row{grid-template-columns:1fr}.intro{margin-top:16px}#design{width:100%}}
+@media print{header,.layout>.panel:first-child,.workspace-head,.editor-tools,.tip,.notice,footer{display:none!important}body,main{background:white;margin:0;padding:0}.layout{display:block}.panel{border:0;padding:0;box-shadow:none}.stage{padding:0;background:white}#design{width:100mm;height:125mm;aspect-ratio:auto;box-shadow:none}}
+</style>
+</head>
+<body>
+<header><div class="top"><div class="brand">MARFIM <em>CRIATIVA AI</em></div><div class="badge">EDITOR INTERACTIVO · VERSÃO 0.8</div></div>
+<div class="intro"><h1>Cria. Personaliza. Exporta.</h1><p>Escolhe um modelo, personaliza os textos, move os elementos e exporta uma imagem PNG ou um projecto editável. Podes instalar esta aplicação no teu dispositivo quando estiver publicada num endereço HTTPS.</p></div></header>
+<main><div class="layout">
+<section class="panel">
+<h2>Assistente de criação</h2>
+<label for="promptInput">Descreve o que pretendes criar</label>
+<textarea id="promptInput" placeholder="Ex.: Flyer para culto de jovens, tema Juventude transformada, domingo às 9h, Centro Jerusalém Rocha Pinto." style="min-height:92px"></textarea>
+<label for="kindInput">Tipo de material</label>
+<select id="kindInput">
+<option value="flyer">Flyer / cartaz</option><option value="convite">Convite</option><option value="panfleto">Panfleto</option><option value="cv">Currículo (modelo visual)</option><option value="topper">Topo de bolo (ideia visual)</option><option value="documento">Documento / aviso</option>
+</select>
+<div class="buttons"><button class="soft" id="generateBtn">Criar proposta local</button><button class="primary" id="aiGenerateBtn">✨ Criar com IA online</button></div>
+<p class="tip" id="aiStatus">Modo local disponível. Para activar a IA online, publica esta versão com a função Netlify e configura a variável secreta GEMINI_API_KEY.</p>
+<hr style="border:0;border-top:1px solid var(--line);margin:18px 0">
+<h2>Modelos prontos</h2>
+<p class="section-note">Escolhe uma base e depois substitui os textos pelos dados correctos.</p>
+<div class="template-grid">
+<button class="template-card" data-template="church"><strong>⛪ Igreja e conferência</strong><span>Cultos, vigílias e encontros de jovens</span></button>
+<button class="template-card" data-template="business"><strong>💼 Empresa e serviços</strong><span>Promoções, negócios e divulgação</span></button>
+<button class="template-card" data-template="birthday"><strong>🎉 Festa e aniversário</strong><span>Convites e celebrações</span></button>
+<button class="template-card" data-template="jobs"><strong>📢 Oportunidade de emprego</strong><span>Anúncios e informação profissional</span></button>
+<button class="template-card" data-template="training"><strong>🎓 Formação</strong><span>Cursos, inscrições e workshops</span></button>
+<button class="template-card" data-template="cv"><strong>📄 Currículo</strong><span>Modelo visual de apresentação profissional</span></button>
+<button class="template-card" data-template="wedding"><strong>💍 Casamento e bênção</strong><span>Convites, chá de bênção e cerimónias</span></button>
+<button class="template-card" data-template="school"><strong>🏫 Escola e trabalhos</strong><span>Avisos, inscrições e actividades escolares</span></button>
+<button class="template-card" data-template="product"><strong>🛍️ Produto e promoção</strong><span>Publicidade de produtos e campanhas</span></button>
+<button class="template-card" data-template="health"><strong>🩺 Saúde e comunidade</strong><span>Campanhas, palestras e acções comunitárias</span></button>
+</div>
+<h2>1. Conteúdo do design</h2>
+<label for="orgInput">Organização / marca</label><input id="orgInput" value="MARFIM CONECTA">
+<label for="titleInput">Título principal</label><input id="titleInput" value="Conferência de Jovens">
+<label for="descInput">Tema ou descrição</label><textarea id="descInput">Jovens Transformados pela Palavra</textarea>
+<div class="row"><div><label for="dateInput">Data</label><input id="dateInput" value="25 de Outubro"></div><div><label for="timeInput">Hora</label><input id="timeInput" value="09h00"></div></div>
+<label for="placeInput">Local</label><input id="placeInput" value="Centro Jerusalém — Rocha Pinto">
+<label for="contactInput">Contacto / informação</label><input id="contactInput" value="Entrada livre">
+<label for="photoInput">Adicionar fotografia ou logótipo</label><input id="photoInput" type="file" accept="image/*">
+<label for="formatInput">Formato do design</label>
+<select id="formatInput"><option value="poster">Cartaz / publicação (4:5)</option><option value="square">Publicação quadrada (1:1)</option><option value="story">Story / estado WhatsApp (9:16)</option><option value="wide">Faixa horizontal (3:2)</option></select>
+<label for="styleInput">Modelo visual</label>
+<select id="styleInput"><option value="modern">Moderno — azul e laranja</option><option value="minimal">Minimalista — limpo</option><option value="elegant">Elegante — vinho</option><option value="bright">Vibrante — verde</option><option value="corporate">Corporativo — azul</option></select>
+<div class="buttons"><button class="dark" id="applyStyleBtn">Aplicar formato e modelo</button></div>
+<label>3. Paleta de cores</label><div class="swatches">
+<button class="swatch" style="background:#102746" data-bg="#102746" aria-label="Azul marinho"></button>
+<button class="swatch" style="background:#194b7a" data-bg="#194b7a" aria-label="Azul"></button>
+<button class="swatch" style="background:#245c48" data-bg="#245c48" aria-label="Verde"></button>
+<button class="swatch" style="background:#6b2d5c" data-bg="#6b2d5c" aria-label="Vinho"></button>
+<button class="swatch" style="background:#242424" data-bg="#242424" aria-label="Preto"></button>
+<button class="swatch" style="background:#f2e6d0" data-bg="#f2e6d0" aria-label="Creme"></button></div>
+<div class="buttons"><button class="primary" id="pngBtn">Exportar imagem PNG</button><button class="dark" id="projectBtn">Guardar projecto editável</button><button class="soft" id="printBtn">Imprimir / PDF</button><button class="soft" id="resetBtn">Repor modelo</button></div>
+<h2>4. Rascunho neste dispositivo</h2>
+<p class="section-note">Guarda o trabalho neste navegador para continuares mais tarde no mesmo dispositivo.</p>
+<div class="buttons"><button class="dark" id="saveDraftBtn">Guardar rascunho</button><button class="soft" id="loadDraftBtn">Recuperar rascunho</button><button class="soft" id="deleteDraftBtn">Apagar rascunho</button></div>
+<p class="tip">O rascunho fica guardado apenas neste navegador. Não é uma cópia online nem substitui a exportação do projecto editável.</p>
+<div class="notice"><b>Como editar:</b> toca num texto do cartaz para o seleccionar e arrasta-o para mudar de posição. Também podes usar os campos acima. A fotografia pode ser arrastada.</div>
+<p class="tip">Esta versão funciona localmente no navegador. Ainda não tem IA generativa real, contas, sincronização online ou publicação num site.</p>
+</section>
+<section class="panel">
+<div class="workspace-head"><h2>Pré-visualização e edição</h2><span class="status">EDITÁVEL</span></div>
+<div class="stage"><div id="design" aria-label="Área de design">
+<div class="shape one"></div><div class="shape two"></div>
+<div class="item" id="org" data-name="Organização" contenteditable="true" spellcheck="false">MARFIM CONECTA</div>
+<div class="item" id="kicker" data-name="Categoria" contenteditable="true" spellcheck="false">EVENTO ESPECIAL</div>
+<div class="item" id="headline" data-name="Título" contenteditable="true" spellcheck="false">Conferência de Jovens</div>
+<div class="item" id="desc" data-name="Descrição" contenteditable="true" spellcheck="false">Jovens Transformados pela Palavra</div>
+<div class="item" id="details" data-name="Detalhes" contenteditable="true" spellcheck="false">📅 25 de Outubro · 09h00<br>📍 Centro Jerusalém — Rocha Pinto<br>✦ Entrada livre</div>
+<div class="item" id="footer" data-name="Rodapé" contenteditable="true" spellcheck="false">INFORMAÇÃO · COMUNIDADE · CRIATIVIDADE</div>
+<img id="photo" class="photo" alt="Fotografia adicionada" hidden>
+</div></div>
+<div class="editor-tools"><button class="soft" id="frontBtn">Trazer seleccionado para frente</button><button class="soft" id="removePhotoBtn">Remover fotografia</button></div>
+<p class="tip">Para editar directamente, toca duas vezes no texto e escreve. Para mover, arrasta a área do elemento. O ficheiro PNG é uma imagem final; o projecto JSON conserva os textos e posições para continuares a editar nesta ferramenta.</p>
+</section></div></main>
+<footer>MARFIM CRIATIVA AI · Uma iniciativa da Marfim Conecta · Protótipo de demonstração · Versão 0.6</footer>
+<script>
+const $=id=>document.getElementById(id);
+const design=$('design');
+const ids=['org','kicker','headline','desc','details','footer'];
+let currentFormat='poster', currentStyle='modern';
+const defaults={
+ org:{text:'MARFIM CONECTA',left:'8%',top:'7%',width:'84%',fontSize:'',color:''},
+ kicker:{text:'EVENTO ESPECIAL',left:'8%',top:'24%',width:'84%',fontSize:'',color:''},
+ headline:{text:'Conferência de Jovens',left:'8%',top:'30%',width:'84%',fontSize:'',color:''},
+ desc:{text:'Jovens Transformados pela Palavra',left:'8%',top:'49%',width:'84%',fontSize:'',color:''},
+ details:{text:'📅 25 de Outubro · 09h00\\n📍 Centro Jerusalém — Rocha Pinto\\n✦ Entrada livre',left:'8%',top:'70%',width:'84%',fontSize:'',color:''},
+ footer:{text:'INFORMAÇÃO · COMUNIDADE · CRIATIVIDADE',left:'8%',top:'91%',width:'84%',fontSize:'',color:''}
+};
+let selected=null, bg='#102746', photoData=null, dragging=null, moved=false;
+function sync(){
+ $('org').textContent=$('orgInput').value.toUpperCase();
+ $('headline').textContent=$('titleInput').value;
+ $('desc').textContent=$('descInput').value;
+ $('details').innerHTML='📅 '+escapeHtml($('dateInput').value)+' · '+escapeHtml($('timeInput').value)+'<br>📍 '+escapeHtml($('placeInput').value)+'<br>✦ '+escapeHtml($('contactInput').value);
+}
+function escapeHtml(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+['orgInput','titleInput','descInput','dateInput','timeInput','placeInput','contactInput'].forEach(id=>$(id).addEventListener('input',sync));
+ids.forEach(id=>{
+ const el=$(id);
+ el.addEventListener('pointerdown',e=>{
+   if(e.target.isContentEditable && document.activeElement===el) return;
+   select(el);
+   const r=design.getBoundingClientRect(), er=el.getBoundingClientRect();
+   dragging={el,startX:e.clientX,startY:e.clientY,left:er.left-r.left,top:er.top-r.top,scaleX:r.width/520,scaleY:r.height/650};
+   moved=false;el.setPointerCapture?.(e.pointerId);
+ });
+ el.addEventListener('pointermove',e=>{
+   if(!dragging||dragging.el!==el)return;
+   const dx=e.clientX-dragging.startX,dy=e.clientY-dragging.startY;
+   if(Math.abs(dx)+Math.abs(dy)>3)moved=true;
+   if(moved){el.style.left=((dragging.left+dx)/design.clientWidth*100)+'%';el.style.top=((dragging.top+dy)/design.clientHeight*100)+'%';}
+ });
+ el.addEventListener('pointerup',()=>{if(dragging?.el===el)dragging=null;});
+ el.addEventListener('click',()=>select(el));
+ el.addEventListener('input',()=>{if(id==='org')$('orgInput').value=el.textContent;if(id==='headline')$('titleInput').value=el.textContent;if(id==='desc')$('descInput').value=el.textContent;});
+});
+function select(el){ids.forEach(id=>$(id).classList.remove('selected'));selected=el;el.classList.add('selected');}
+document.querySelectorAll('.swatch').forEach(b=>b.addEventListener('click',()=>{bg=b.dataset.bg;design.style.background=bg;const light=bg==='#f2e6d0';design.style.color=light?'#172333':'white';$('desc').style.color=light?'#344256':'#e0e9f4';$('footer').style.color=light?'#526071':'#d4dfec';$('kicker').style.color=light?'#9b4f00':'#ffc27d';$('details').style.borderColor=light?'#8d99a8':'#ffffff66';document.querySelectorAll('.swatch').forEach(x=>x.style.outline='');b.style.outline='2px solid #f28c28';}));
+$('photoInput').addEventListener('change',e=>{const f=e.target.files?.[0];if(!f)return;const reader=new FileReader();reader.onload=()=>{photoData=reader.result;$('photo').src=photoData;$('photo').hidden=false;};reader.readAsDataURL(f);});
+$('removePhotoBtn').addEventListener('click',()=>{photoData=null;$('photo').hidden=true;$('photo').removeAttribute('src');$('photoInput').value='';});
+$('frontBtn').addEventListener('click',()=>{if(selected){selected.style.zIndex=10;}});
+function saveBlob(blob,name){const a=document.createElement('a');const u=URL.createObjectURL(blob);a.href=u;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(u),1500);}
+function buildExportCanvas(){
+ return new Promise((resolve,reject)=>{
+  const dimensions={poster:[1200,1500],square:[1200,1200],story:[1080,1920],wide:[1500,1000]};
+  const [W,H]=dimensions[currentFormat]||dimensions.poster,canvas=document.createElement('canvas');canvas.width=W;canvas.height=H;const ctx=canvas.getContext('2d');
+  ctx.fillStyle=bg;ctx.fillRect(0,0,W,H);
+  ctx.fillStyle='#f28c28';ctx.beginPath();ctx.arc(1140,0,300,0,Math.PI*2);ctx.fill();
+  ctx.strokeStyle=bg==='#f2e6d0'?'#b9ad98':'#ffffff44';ctx.lineWidth=5;ctx.beginPath();ctx.arc(-10,1260,230,0,Math.PI*2);ctx.stroke();
+  const dr=design.getBoundingClientRect();
+  const elements=ids.map(id=>{const el=$(id),r=el.getBoundingClientRect();return {el,x:(r.left-dr.left)/dr.width*W,y:(r.top-dr.top)/dr.height*H,w:r.width/dr.width*W,h:r.height/dr.height*H};});
+  function drawText(item){
+    const {el,x,y,w}=item,cs=getComputedStyle(el);let size=parseFloat(cs.fontSize)*W/dr.width;
+    if(el.id==='headline')size=Math.max(50,Math.min(145,size));
+    if(el.id==='desc')size=Math.max(30,Math.min(55,size));
+    if(el.id==='details')size=Math.max(25,Math.min(42,size));
+    if(el.id==='org')size=Math.max(23,Math.min(42,size));
+    if(el.id==='kicker')size=Math.max(22,Math.min(35,size));
+    if(el.id==='footer')size=Math.max(17,Math.min(28,size));
+    ctx.fillStyle=cs.color;ctx.font=(cs.fontWeight==='900'||parseInt(cs.fontWeight)>=700?'bold ':'')+size+'px Arial';ctx.textBaseline='top';
+    const raw=el.innerText.split('\n'),lineH=size*(el.id==='headline'?1.03:1.45);let yy=y;
+    raw.forEach(par=>{let words=par.split(/\s+/),line='';for(const word of words){const test=line?line+' '+word:word;if(ctx.measureText(test).width>w && line){ctx.fillText(line,x,yy);yy+=lineH;line=word;}else line=test;}if(line){ctx.fillText(line,x,yy);yy+=lineH;}});
+  }
+  const photo=$('photo');
+  const drawRest=()=>{
+    try{elements.forEach(drawText);resolve(canvas);}catch(e){reject(e);}
+  };
+  if(photoData&&!photo.hidden){const img=new Image();img.onload=()=>{const r=photo.getBoundingClientRect();ctx.drawImage(img,(r.left-dr.left)/dr.width*W,(r.top-dr.top)/dr.height*H,r.width/dr.width*W,r.height/dr.height*H);drawRest();};img.onerror=drawRest;img.src=photoData;}else drawRest();
+ });
+}
+$('pngBtn').addEventListener('click',async()=>{try{const c=await buildExportCanvas();c.toBlob(b=>{if(b)saveBlob(b,'marfim-criativa-design.png');else alert('Não foi possível exportar a imagem.');},'image/png');}catch(e){alert('Falha ao exportar. Tenta novamente.');}});
+$('projectBtn').addEventListener('click',()=>{
+ const project={app:'Marfim Criativa AI',version:'0.5',format:currentFormat,style:currentStyle,background:bg,elements:ids.map(id=>{const e=$(id);return{id,text:e.innerText,left:e.style.left||getComputedStyle(e).left,top:e.style.top||getComputedStyle(e).top,width:e.style.width||getComputedStyle(e).width,fontSize:getComputedStyle(e).fontSize,color:getComputedStyle(e).color};}),photo:photoData};
+ saveBlob(new Blob([JSON.stringify(project,null,2)],{type:'application/json'}),'marfim-criativa-projecto.json');
+});
+$('printBtn').addEventListener('click',()=>window.print());
+$('resetBtn').addEventListener('click',()=>{Object.entries({orgInput:'MARFIM CONECTA',titleInput:'Conferência de Jovens',descInput:'Jovens Transformados pela Palavra',dateInput:'25 de Outubro',timeInput:'09h00',placeInput:'Centro Jerusalém — Rocha Pinto',contactInput:'Entrada livre'}).forEach(([id,v])=>$(id).value=v);ids.forEach(id=>{const e=$(id),d=defaults[id];e.style.left=d.left;e.style.top=d.top;e.style.width=d.width;e.style.zIndex='2';e.textContent=d.text;});bg='#102746';design.style.background=bg;design.style.color='white';$('desc').style.color='#e0e9f4';$('footer').style.color='#d4dfec';$('kicker').style.color='#ffc27d';$('details').style.borderColor='#ffffff66';$('removePhotoBtn').click();$('formatInput').value='poster';$('styleInput').value='modern';currentFormat='poster';currentStyle='modern';design.style.aspectRatio='4 / 5';applyFormatAndStyle();sync();});
+
+// Formatos e modelos visuais: modelos locais, sem serviço externo.
+function applyFormatAndStyle(){
+ currentFormat=$('formatInput').value; currentStyle=$('styleInput').value;
+ const ratios={poster:'4 / 5',square:'1 / 1',story:'9 / 16',wide:'3 / 2'};
+ design.style.aspectRatio=ratios[currentFormat]||'4 / 5';
+ const styles={
+  modern:{bg:'#102746',accent:'#f28c28',kicker:'#ffc27d',desc:'#e0e9f4',footer:'#d4dfec',shape:'circle'},
+  minimal:{bg:'#f7f8fa',accent:'#194b7a',kicker:'#194b7a',desc:'#344256',footer:'#526071',shape:'minimal'},
+  elegant:{bg:'#4a203f',accent:'#d7b36a',kicker:'#f0d99e',desc:'#f3eaf0',footer:'#e4d5e0',shape:'elegant'},
+  bright:{bg:'#245c48',accent:'#f4c542',kicker:'#ffe38a',desc:'#e4f4ec',footer:'#d1e9dc',shape:'circle'},
+  corporate:{bg:'#194b7a',accent:'#f28c28',kicker:'#ffd09a',desc:'#e5eff8',footer:'#d3e3f2',shape:'corporate'}
+ };
+ const st=styles[currentStyle]||styles.modern; bg=st.bg; design.style.background=bg; design.style.color=(currentStyle==='minimal')?'#172333':'white';
+ $('desc').style.color=st.desc; $('footer').style.color=st.footer; $('kicker').style.color=st.kicker;
+ $('details').style.borderColor=(currentStyle==='minimal')?'#aab5c2':'#ffffff66';
+ const shapes=design.querySelectorAll('.shape');
+ shapes[0].style.background=st.accent; shapes[0].style.border='0'; shapes[0].style.borderRadius=st.shape==='minimal'?'0':'50%';
+ shapes[0].style.width=currentStyle==='minimal'?'100%':'290px'; shapes[0].style.height=currentStyle==='minimal'?'10px':'290px'; shapes[0].style.right=currentStyle==='minimal'?'0':'-95px'; shapes[0].style.top=currentStyle==='minimal'?'0':'-85px';
+ shapes[1].style.display=currentStyle==='minimal'?'none':'block'; shapes[1].style.borderColor=currentStyle==='minimal'?'transparent':'#ffffff44';
+ $('org').style.color=(currentStyle==='minimal')?'#194b7a':'white';
+ $('headline').style.fontFamily=currentStyle==='elegant'?'Georgia,serif':'Arial,Helvetica,sans-serif';
+ document.querySelectorAll('.swatch').forEach(x=>x.style.outline='');
+}
+$('applyStyleBtn').addEventListener('click',()=>{applyFormatAndStyle();alert('Modelo e formato aplicados. Revê a composição antes de exportar.');});
+$('formatInput').addEventListener('change',()=>{currentFormat=$('formatInput').value;const ratios={poster:'4 / 5',square:'1 / 1',story:'9 / 16',wide:'3 / 2'};design.style.aspectRatio=ratios[currentFormat]||'4 / 5';});
+
+// Assistente local de propostas: transforma palavras-chave em conteúdo e estilo de modelo.
+$('generateBtn').addEventListener('click',()=>{
+ const prompt=$('promptInput').value.trim();
+ const kind=$('kindInput').value;
+ if(!prompt){alert('Escreve primeiro uma descrição do material que pretendes criar.');$('promptInput').focus();return;}
+ const p=prompt.toLowerCase();
+ applyFormatAndStyle();
+ let title='',org='MARFIM CONECTA',desc=prompt,date='A confirmar',time='A confirmar',place='A confirmar',contact='Mais informações';
+ const dateMatch=prompt.match(/\b\d{1,2}\s+(?:de\s+)?(?:janeiro|fevereiro|março|abril|maio|junho|julho|agosto|setembro|outubro|novembro|dezembro)(?:\s+de\s+\d{4})?/i);
+ const timeMatch=prompt.match(/\b(?:às?\s*)?\d{1,2}(?:h\d{0,2}|:\d{2})\b/i);
+ const at=prompt.match(/\b(?:em|no|na|local:)\s+([^,.;\n]+)/i);
+ if(dateMatch)date=dateMatch[0];
+ if(timeMatch)time=timeMatch[0].replace(/^às?\s*/i,'');
+ if(at)place=at[1].trim();
+ const clean=prompt.replace(/[.!?]+$/,'');
+ if(kind==='convite'){title='Estás convidado!';desc=clean;contact='Confirma a tua presença';$('kicker').textContent='CONVITE ESPECIAL';}
+ else if(kind==='panfleto'){title='Conhece os nossos serviços';desc=clean;contact='Contacta-nos para mais informações';$('kicker').textContent='INFORMAÇÃO E SERVIÇOS';}
+ else if(kind==='cv'){title='Currículo profissional';desc='Competências · Experiência · Formação';contact='Perfil profissional';$('kicker').textContent='MODELO DE CURRÍCULO';}
+ else if(kind==='topper'){title='Celebração especial';desc=clean;contact='Modelo de topo de bolo';$('kicker').textContent='PERSONALIZA A TUA FESTA';}
+ else if(kind==='documento'){title='Comunicado';desc=clean;contact='Agradecemos a atenção';$('kicker').textContent='AVISO IMPORTANTE';}
+ else {title='Evento especial';desc=clean;$('kicker').textContent='MARCA NA AGENDA';}
+ // Prefer a quoted phrase as the main title, otherwise infer from common event words.
+ const quoted=prompt.match(/[“"]([^”"]{3,70})[”"]/);
+ const themeMatch=prompt.match(/(?:tema|assunto|título)\s*[:\-]?\s*([^,.;\n]+)/i);
+ if(quoted)title=quoted[1].trim();
+ else if(themeMatch)title=themeMatch[1].trim();
+ else if(/\b(culto|conferência|conferencia|seminário|seminario|palestra|acampamento|aniversário|aniversario|casamento|formação|formacao|workshop|reunião|reuniao)\b/i.test(prompt)){
+   const m=prompt.match(/\b(culto(?: de [\wÀ-ÿ -]+)?|conferência(?: de [\wÀ-ÿ -]+)?|conferencia(?: de [\wÀ-ÿ -]+)?|seminário(?: de [\wÀ-ÿ -]+)?|seminario(?: de [\wÀ-ÿ -]+)?|palestra(?: de [\wÀ-ÿ -]+)?|acampamento(?: de [\wÀ-ÿ -]+)?|aniversário(?: de [\wÀ-ÿ -]+)?|aniversario(?: de [\wÀ-ÿ -]+)?|casamento|formação(?: de [\wÀ-ÿ -]+)?|formacao(?: de [\wÀ-ÿ -]+)?|workshop|reunião(?: de [\wÀ-ÿ -]+)?|reuniao(?: de [\wÀ-ÿ -]+)?)/i);
+   if(m)title=m[0].trim().replace(/\s+/g,' ').replace(/^./,s=>s.toUpperCase());
+ }
+ // Extract organization and contact if supplied in the prompt.
+ const orgMatch=prompt.match(/(?:organização|organizador|igreja|empresa|marca)\s*[:\-]?\s*([^,.;\n]+)/i);
+ if(orgMatch)org=orgMatch[1].trim();
+ const contactMatch=prompt.match(/(?:contacto|contato|telefone|whatsapp)\s*[:\-]?\s*([+\d][\d\s()-]{5,})/i);
+ if(contactMatch)contact=contactMatch[1].trim();
+ $('orgInput').value=org;
+ $('titleInput').value=title;
+ $('descInput').value=desc;
+ $('dateInput').value=date;
+ $('timeInput').value=time;
+ $('placeInput').value=place;
+ $('contactInput').value=contact;
+ sync();
+ // Use a colour mood that fits common contexts.
+ let chosen='#102746';
+ if(/\b(criança|crianca|infantil|festa|aniversário|aniversario|bolo|casamento|noiva)\b/.test(p))chosen='#6b2d5c';
+ else if(/\b(empresa|negócio|negocio|tecnologia|informática|informatica|digital|currículo|curriculo|cv)\b/.test(p))chosen='#194b7a';
+ else if(/\b(igreja|culto|oração|oracao|bíblia|biblia|jovens|cristão|cristao|conferência|conferencia)\b/.test(p))chosen='#102746';
+ if(currentStyle==='modern'){bg=chosen;design.style.background=bg;design.style.color='white';$('desc').style.color='#e0e9f4';$('footer').style.color='#d4dfec';$('kicker').style.color='#ffc27d';$('details').style.borderColor='#ffffff66';}
+ alert('Proposta criada com o modelo local. Revê os textos e corrige os detalhes antes de exportar.');
+});
+
+
+// Assistente online opcional: a chave fica no servidor Netlify, nunca no navegador.
+$('aiGenerateBtn').addEventListener('click', async ()=>{
+ const prompt=$('promptInput').value.trim();
+ if(!prompt){alert('Escreve primeiro uma descrição.');$('promptInput').focus();return;}
+ const btn=$('aiGenerateBtn'), status=$('aiStatus');
+ btn.disabled=true; btn.textContent='A preparar proposta…'; status.textContent='A contactar a IA online. Aguarda um momento.';
+ try {
+   const res=await fetch('/.netlify/functions/create-design',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt,kind:$('kindInput').value})});
+   const data=await res.json().catch(()=>({}));
+   if(!res.ok) throw new Error(data.error || 'Não foi possível usar a IA online.');
+   const fields={orgInput:'org',titleInput:'title',descInput:'description',dateInput:'date',timeInput:'time',placeInput:'place',contactInput:'contact'};
+   for(const [id,key] of Object.entries(fields)){if(typeof data[key]==='string' && data[key].trim()) $(id).value=data[key].slice(0,500);}
+   if(['modern','minimal','elegant','corporate','bright'].includes(data.style)) $('styleInput').value=data.style;
+   if(['poster','square','story','wide'].includes(data.format)) $('formatInput').value=data.format;
+   if(typeof data.kicker==='string' && data.kicker.trim()) $('kicker').textContent=data.kicker.slice(0,60);
+   currentStyle=$('styleInput').value; currentFormat=$('formatInput').value; applyFormatAndStyle(); sync();
+   status.textContent='Proposta criada com IA. Confere todos os dados antes de exportar.';
+ } catch(err) {
+   status.textContent='IA online indisponível: '+(err.message||'verifica a configuração do servidor')+' Usa “Criar proposta local” enquanto resolves a configuração.';
+ } finally {btn.disabled=false;btn.textContent='✨ Criar com IA online';}
+});
+
+// Biblioteca local de modelos: preenche os campos com bases editáveis.
+const templateLibrary={
+ church:{kind:'flyer',format:'poster',style:'modern',org:'IGREJA / ORGANIZAÇÃO',title:'Conferência de Jovens',desc:'Jovens Transformados pela Palavra',date:'25 de Outubro',time:'09h00',place:'Centro Jerusalém — Rocha Pinto',contact:'Entrada livre',kicker:'CONFERÊNCIA ESPECIAL'},
+ business:{kind:'panfleto',format:'square',style:'corporate',org:'NOME DA EMPRESA',title:'Conheça os nossos serviços',desc:'Qualidade, confiança e profissionalismo',date:'Promoção válida até...',time:'',place:'Endereço da empresa',contact:'WhatsApp: 000 000 000',kicker:'SERVIÇOS E SOLUÇÕES'},
+ birthday:{kind:'convite',format:'poster',style:'elegant',org:'FAMÍLIA / ORGANIZADOR',title:'Vamos celebrar!',desc:'Estás convidado para um dia especial',date:'Data do evento',time:'Hora',place:'Local da celebração',contact:'Confirma a tua presença',kicker:'CONVITE ESPECIAL'},
+ jobs:{kind:'flyer',format:'square',style:'corporate',org:'EMPRESA / ENTIDADE',title:'Oportunidade de Emprego',desc:'Função: [indicar vaga]\nRequisitos: [indicar requisitos]',date:'Prazo de candidatura',time:'',place:'Local ou modo de candidatura',contact:'Contacto oficial',kicker:'RECRUTAMENTO'},
+ training:{kind:'flyer',format:'poster',style:'bright',org:'CENTRO DE FORMAÇÃO',title:'Inscrições abertas',desc:'Curso: [nome do curso]\nAprende competências para o futuro',date:'Início: [data]',time:'Horário: [horário]',place:'Local da formação',contact:'Inscrições: [contacto]',kicker:'FORMAÇÃO PROFISSIONAL'},
+ cv:{kind:'cv',format:'poster',style:'minimal',org:'NOME COMPLETO',title:'Currículo Profissional',desc:'Área profissional / objectivo de carreira',date:'Experiência profissional',time:'',place:'Formação académica e cursos',contact:'Telefone · E-mail',kicker:'PERFIL PROFISSIONAL'},
+ wedding:{kind:'convite',format:'poster',style:'elegant',org:'NOME DOS NOIVOS',title:'Chá de Bênção',desc:'Um momento de amor, fé e partilha',date:'Data do evento',time:'13h00',place:'Local da cerimónia',contact:'Confirma a tua presença',kicker:'CONVITE ESPECIAL'},
+ school:{kind:'documento',format:'poster',style:'corporate',org:'NOME DA ESCOLA',title:'Aviso à Comunidade Escolar',desc:'Informação importante para alunos e encarregados de educação',date:'Data: [preencher]',time:'',place:'Escola / sala / local',contact:'Secretaria da escola',kicker:'COMUNICADO ESCOLAR'},
+ product:{kind:'panfleto',format:'square',style:'bright',org:'NOME DA MARCA',title:'Oferta Especial',desc:'Apresentamos uma solução feita para si',date:'Promoção até [data]',time:'',place:'Disponível em [local]',contact:'Encomendas: [contacto]',kicker:'PROMOÇÃO'},
+ health:{kind:'flyer',format:'poster',style:'bright',org:'ORGANIZAÇÃO / PARCEIROS',title:'Feira de Saúde',desc:'Cuide de si e da sua comunidade',date:'Data: [preencher]',time:'09h00',place:'Local da actividade',contact:'Participação gratuita',kicker:'SAÚDE E COMUNIDADE'}
+};
+document.querySelectorAll('[data-template]').forEach(btn=>btn.addEventListener('click',()=>{
+ const t=templateLibrary[btn.dataset.template]; if(!t)return;
+ $('kindInput').value=t.kind; $('formatInput').value=t.format; $('styleInput').value=t.style;
+ $('orgInput').value=t.org; $('titleInput').value=t.title; $('descInput').value=t.desc;
+ $('dateInput').value=t.date; $('timeInput').value=t.time; $('placeInput').value=t.place; $('contactInput').value=t.contact;
+ $('kicker').textContent=t.kicker; $('promptInput').value='Criar '+t.title+' para '+t.org+'. Tema/descrição: '+t.desc+'. Data: '+t.date+'. Hora: '+t.time+'. Local: '+t.place+'. Contacto: '+t.contact+'.';
+ applyFormatAndStyle(); sync();
+ if(t.kind==='cv') { $('footer').textContent='EXPERIÊNCIA · FORMAÇÃO · COMPETÊNCIAS'; }
+ alert('Modelo carregado. Substitui todos os campos entre parênteses rectos ou dados de exemplo antes de exportar.');
+}));
+
+
+// Rascunho local: guarda os campos e a composição no navegador do dispositivo.
+const draftKey='marfim-criativa-ai-draft-v07';
+function collectDraft(){
+ return {version:'0.6',fields:{promptInput:$('promptInput').value,kindInput:$('kindInput').value,orgInput:$('orgInput').value,titleInput:$('titleInput').value,descInput:$('descInput').value,dateInput:$('dateInput').value,timeInput:$('timeInput').value,placeInput:$('placeInput').value,contactInput:$('contactInput').value,formatInput:$('formatInput').value,styleInput:$('styleInput').value},background:bg,photo:photoData,elements:ids.map(id=>{const e=$(id);return{id,text:e.innerText,left:e.style.left,top:e.style.top,width:e.style.width,zIndex:e.style.zIndex,color:e.style.color,fontSize:e.style.fontSize};})};
+}
+$('saveDraftBtn').addEventListener('click',()=>{try{localStorage.setItem(draftKey,JSON.stringify(collectDraft()));alert('Rascunho guardado neste navegador.');}catch(e){alert('Não foi possível guardar. A fotografia pode ser demasiado grande; tenta removê-la e guardar novamente.');}});
+$('loadDraftBtn').addEventListener('click',()=>{try{const raw=localStorage.getItem(draftKey);if(!raw){alert('Ainda não existe um rascunho guardado neste navegador.');return;}const d=JSON.parse(raw);Object.entries(d.fields||{}).forEach(([id,v])=>{if($(id))$(id).value=v;});applyFormatAndStyle();if(d.background){bg=d.background;design.style.background=bg;}if(d.photo){photoData=d.photo;$('photo').src=photoData;$('photo').hidden=false;}else{$('photo').hidden=true;$('photo').removeAttribute('src');photoData=null;} (d.elements||[]).forEach(x=>{const e=$(x.id);if(!e)return;e.innerText=x.text;e.style.left=x.left||'';e.style.top=x.top||'';e.style.width=x.width||'';e.style.zIndex=x.zIndex||'';e.style.color=x.color||'';e.style.fontSize=x.fontSize||'';});sync();alert('Rascunho recuperado. Revê a composição antes de exportar.');}catch(e){alert('O rascunho não pôde ser recuperado.');}});
+$('deleteDraftBtn').addEventListener('click',()=>{if(confirm('Apagar o rascunho guardado neste navegador?')){localStorage.removeItem(draftKey);alert('Rascunho apagado.');}});
+
+sync();select($('headline'));
+if ('serviceWorker' in navigator && location.protocol.startsWith('http')) {
+  window.addEventListener('load', () => navigator.serviceWorker.register('./service-worker.js').catch(()=>{}));
+}
+</script>
+</body></html>
